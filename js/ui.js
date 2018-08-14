@@ -1,3 +1,5 @@
+// ----------------- Image Editing functions -----------------
+
 var canvas;
 var texture;
 var source;
@@ -5,6 +7,7 @@ var textureEdited;
 var edited;
 var updatedImage;
 var finalImage;
+var image;
 
 let brightness = 0;
 let contrast = 0;
@@ -44,13 +47,17 @@ function init() {
       alert(e);
       return;
   };
+  image = new Image;
+
   edited = document.getElementById('edited');
   textureEdited = canvas.texture(edited);
+  canvas.id = "sourceCanvas";
 
   edited.parentNode.insertBefore(canvas, edited);
   edited.parentNode.removeChild(edited);
 
   updatedImage = canvas.draw(textureEdited).update();
+  image.src = canvas.toDataURL();
 }
 
 function uploadFile() {
@@ -63,6 +70,7 @@ function uploadFile() {
   edited.onload = function() {
     textureEdited = canvas.texture(edited);
     updatedImage = canvas.draw(textureEdited).update();
+    image.src = canvas.toDataURL();
   };
 }
 
@@ -92,12 +100,14 @@ function blackAndWhite() {
     updatedImage = canvas.draw(textureEdited).hueSaturation(0,-1).update();
     updateTexture(updatedImage);
     updatedImage = canvas.draw(textureEdited).brightnessContrast(brightness,contrast).update();
+    image.src = canvas.toDataURL();
   }
   else {
     textureEdited = canvas.texture(edited);
     updatedImage = canvas.draw(textureEdited).hueSaturation(0,0).update();
     updateTexture(updatedImage);
     updatedImage = canvas.draw(textureEdited).brightnessContrast(brightness,contrast).update();
+    image.src = canvas.toDataURL();
   }
   updateTexture(updatedImage);
 };
@@ -110,6 +120,7 @@ function filter() {
     slide: function( event, ui ) {
       brightness = 1.75 * (( $( "#slider-brightness" ).slider( "value" ) / 100) - 0.5);
       canvas.draw(textureEdited).brightnessContrast(brightness,contrast).update();
+      image.src = canvas.toDataURL();
     }
   });
 
@@ -120,25 +131,67 @@ function filter() {
      slide: function( event, ui ) {
        contrast = 1. * (( $( "#slider-contrast" ).slider( "value" ) / 100) - 0.5);
        canvas.draw(textureEdited).brightnessContrast(brightness,contrast).update();
+       image.src = canvas.toDataURL();
     }
   });
 };
 
 function updateTexture(updatedImage) {
   textureEdited.loadContentsOf(updatedImage);
+  image.src = canvas.toDataURL();
 }
 
-function download(){
-  // console.log(textureEdited);
-  // console.log(canvas);
-  // console.log(canvas.width);
-  // console.log();
-  Canvas2Image.saveAsPNG(canvas, canvas.width, canvas.height);
-  // canvas.toDataURL();
+function downloadImage(link) {
+  link.href = image.src;
 }
 
 window.onload = function() {
   init();
   uploadFile();
   filter();
+}
+
+// ----------------- SVG functions -----------------
+
+var svgCanvas;
+var formData;
+var test;
+
+function initSVG() {
+  svgCanvas = document.getElementById('sourceCanvas');
+  // svgCanvas = Canvas2Image.convertToJPEG(document.getElementById('sourceCanvas'), edited.width, edited.height);
+  // var svg = svgCanvas.getSvg();
+	// image.src = svgCanvas.toDataURL("image/png");
+  // var canvasImage = new Image;
+  // console.log(textureEdited);
+  // canvasImage.src = svgCanvas.toDataURL();
+  // document.body.appendChild(canvasImage);
+  // test = document.getElementById('edited');
+  // test.src = svgCanvas.toDataURL();
+  // document.body.appendChild(test);
+  // svgCanvas.parentNode.insertBefore(image, edited);
+  // svgCanvas.parentNode.removeChild(edited);
+  // handleFile(svgCanvas);
+  document.body.appendChild(image);
+}
+
+function handleFile(file) {
+  Potrace.loadImageFromUrl(file);
+  Potrace.process(function(){
+    displayImg();
+    displaySVG(1);
+  });
+}
+
+function displayImg(){
+  var imgdiv = document.getElementById('imgdiv');
+  imgdiv.style.display = 'inline-block';
+  imgdiv.innerHTML = "<p>Input image:</p>";
+  imgdiv.appendChild(Potrace.img);
+}
+
+function displaySVG(size, type){
+  var svgdiv = document.getElementById('svgdiv');
+  svgdiv.style.display = 'inline-block';
+  svgdiv.innerHTML = "<p>Result:</p>" + Potrace.getSVG(size, type);
 }
