@@ -14,9 +14,9 @@
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <!-- <script type="text/javascript" src="http://evanw.github.com/glfx.js/glfx.js"></script> -->
-    <script src="https://unpkg.com/glfx-es6/dist/glfx-es6.min.js"></script>
+    <script src="http://evanw.github.com/glfx.js/glfx.js"></script>
 
-    <script src="js/canvas2image.js"></script>
+    <script src="js/potrace.js"></script>
     <script src="js/ui.js"></script>
 </head>
 
@@ -38,7 +38,7 @@
               <input id="upload" type="file" accept="image/x-png,image/gif,image/jpeg"/>
             </div>
           </div>
-          <div class="accordion-heading">
+          <!-- <div class="accordion-heading">
             <a1 class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#uploadAccordionTab">
               Options
             </a1>
@@ -49,7 +49,7 @@
                 <input type="checkbox" name="placeholder2" value="foo2"> foo2<br>
                 <input type="checkbox" name="placeholder3" value="foo3" checked> foo3<br><br>
             </div>
-          </div>
+          </div> -->
         </div>
     </div>
 
@@ -61,9 +61,8 @@
           <button class="tabOption" onclick="openTab(event, 'About')">About</button>
       </div>
       <div id="Image" class="tabcontent">
-        <h3>Image</h3>
         <div id="input-image" class="displayedImage">
-          <img id="edited" src="images/test.png" style="display: none;">
+          <img id="edited" src="images/test.png">
         </div>
         <div>
           <div class="imageSlider">
@@ -78,16 +77,25 @@
           </div>
         </div>
         <div class="btn-toolbar" role="toolbar">
-          <div class="btn-group generate" role="group" aria-label="download">
-            <button id="svg" type="button" class="btn btn-outline-success btn-sm">To svg</button>
+          <div class="btn-group" role="group">
+            <!-- <button id="download" type="button" class="btn btn-outline-success btn-sm" method="get" action="file.doc">Download</button> -->
+            <!-- <a id="download" class="btn btn-outline-success btn-sm" href="">Download</a> -->
+            <a class="btn btn-outline-success btn-sm" href="#" onclick="downloadImage(this)" download>Download</a>
+            <button id="svg" type="button" class="btn btn-outline-success btn-sm" onclick="initSVG()">To svg</button>
           </div>
         </div>
+        <div>
+          <img id="test">
+        </div>
       </div>
-    </div>
 
       <div id="SVG" class="tabcontent">
         <h3>SVG</h3>
         <p>potracing</p>
+        <div id="imgdiv">
+        </div>
+        <div id="svgdiv">
+        </div>
       </div>
 
       <div id="3D" class="tabcontent">
