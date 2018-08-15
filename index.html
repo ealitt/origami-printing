@@ -38,26 +38,14 @@
               <input id="upload" type="file" accept="image/x-png,image/gif,image/jpeg"/>
             </div>
           </div>
-          <!-- <div class="accordion-heading">
-            <a1 class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#uploadAccordionTab">
-              Options
-            </a1>
-          </div>
-          <div id="fileAccordionTab" class="accordion-body collapse">
-            <div class="accorion-inner">
-                <input type="checkbox" name="placeholder1" value="foo1"> foo1<br>
-                <input type="checkbox" name="placeholder2" value="foo2"> foo2<br>
-                <input type="checkbox" name="placeholder3" value="foo3" checked> foo3<br><br>
-            </div>
-          </div> -->
         </div>
     </div>
 
     <div id="viewer">
       <div class="tab">
-          <button class="tabOption" onclick="openTab(event, 'Image')" id="defaultOpen">Image</button>
-          <button class="tabOption" onclick="openTab(event, 'SVG')">SVG</button>
-          <button class="tabOption" onclick="openTab(event, '3D')">3D</button>
+          <button class="tabOption" onclick="openTab(event, 'Image')" id="imageTab">Image</button>
+          <button class="tabOption" onclick="openTab(event, 'SVG')" id="svgTab">SVG</button>
+          <button class="tabOption" onclick="openTab(event, '3D')" id="3dTab">3D</button>
           <button class="tabOption" onclick="openTab(event, 'About')">About</button>
       </div>
       <div id="Image" class="tabcontent">
@@ -73,28 +61,26 @@
           </div>
           <div class="imageToggle">
               <button id="blackAndWhite" type="button" class="btn btn-outline-secondary btn-sm" data-toggle="button" aria-pressed="false" autocomplete="off" onclick="blackAndWhite()">Black and White</button>
+              <button id="invert" type="button" class="btn btn-outline-secondary btn-sm" data-toggle="button" aria-pressed="false" autocomplete="off" onclick="invertImage()">Invert</button>
               <button id="revert" type="button" class="btn btn-outline-primary btn-sm" onclick="revertImage()">Revert</button>
           </div>
         </div>
         <div class="btn-toolbar" role="toolbar">
           <div class="btn-group" role="group">
-            <!-- <button id="download" type="button" class="btn btn-outline-success btn-sm" method="get" action="file.doc">Download</button> -->
-            <!-- <a id="download" class="btn btn-outline-success btn-sm" href="">Download</a> -->
             <a class="btn btn-outline-success btn-sm" href="#" onclick="downloadImage(this)" download>Download</a>
-            <button id="svg" type="button" class="btn btn-outline-success btn-sm" onclick="initSVG()">To svg</button>
+            <button id="svgButton" type="button" class="btn btn-outline-success btn-sm" onclick="initSVG()">To svg</button>
           </div>
-        </div>
-        <div>
-          <img id="test">
         </div>
       </div>
 
       <div id="SVG" class="tabcontent">
-        <h3>SVG</h3>
-        <p>potracing</p>
-        <div id="imgdiv">
+        <div class="svgOutput">
+          <img id="imgdiv">
+          <img id="svgdiv">
         </div>
-        <div id="svgdiv">
+        <div class="btn-group" role="group">
+          <a class="btn btn-outline-success btn-sm" href="#" onclick="downloadSVG(event)" download>Download</a>
+          <button id="3dButton" type="button" class="btn btn-outline-success btn-sm" onclick="init3D()">To 3D</button>
         </div>
       </div>
 

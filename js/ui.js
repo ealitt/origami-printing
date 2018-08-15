@@ -7,10 +7,13 @@ var textureEdited;
 var edited;
 var updatedImage;
 var finalImage;
-var image;
+var imgdiv;
+var sourceWidth;
 
 let brightness = 0;
 let contrast = 0;
+let saturation = -1;
+let invert = ([[0,0], [1,1]]);
 
 function openTab(evt, tabContent) {
     // Declare all variables
@@ -38,7 +41,7 @@ function init() {
     heightStyle: "content",
     collapsible: true
   });
-  document.getElementById("defaultOpen").click();
+  document.getElementById("imageTab").click();
   $( "#blackAndWhite" ).prop('checked', false);
 
   try {
@@ -47,7 +50,7 @@ function init() {
       alert(e);
       return;
   };
-  image = new Image;
+  imgdiv = document.getElementById('imgdiv');
 
   edited = document.getElementById('edited');
   textureEdited = canvas.texture(edited);
@@ -57,7 +60,8 @@ function init() {
   edited.parentNode.removeChild(edited);
 
   updatedImage = canvas.draw(textureEdited).update();
-  image.src = canvas.toDataURL();
+  imgdiv.src = canvas.toDataURL();
+  sourceWidth = canvas.width;
 }
 
 function uploadFile() {
@@ -70,7 +74,8 @@ function uploadFile() {
   edited.onload = function() {
     textureEdited = canvas.texture(edited);
     updatedImage = canvas.draw(textureEdited).update();
-    image.src = canvas.toDataURL();
+    imgdiv.src = canvas.toDataURL();
+    sourceWidth = canvas.width;
   };
 }
 
@@ -83,8 +88,13 @@ function resetValues() {
     $(this).slider( 'value', 50 );
     contrast = 0;
   });
-  $('#blackAndWhite').removeClass('active');
+  $( "#blackAndWhite" ).removeClass('active');
   $( "#blackAndWhite" ).attr("aria-pressed", "false");
+  $( "#invert" ).removeClass('active');
+  $( "#invert" ).attr("aria-pressed", "false");
+  saturation = 0;
+  invert = ([[0,0], [1,1]]);
+
 }
 
 function revertImage() {
@@ -96,23 +106,36 @@ function revertImage() {
 
 function blackAndWhite() {
   if ($( "#blackAndWhite" ).attr("aria-pressed") === "false") {
-    textureEdited = canvas.texture(edited);
-    updatedImage = canvas.draw(textureEdited).hueSaturation(0,-1).update();
-    updateTexture(updatedImage);
-    updatedImage = canvas.draw(textureEdited).brightnessContrast(brightness,contrast).update();
-    image.src = canvas.toDataURL();
+    saturation = -1;
   }
   else {
-    textureEdited = canvas.texture(edited);
-    updatedImage = canvas.draw(textureEdited).hueSaturation(0,0).update();
-    updateTexture(updatedImage);
-    updatedImage = canvas.draw(textureEdited).brightnessContrast(brightness,contrast).update();
-    image.src = canvas.toDataURL();
+    saturation = 0;
   }
+  updateToggle(saturation, invert);
   updateTexture(updatedImage);
 };
 
-function filter() {
+function invertImage(){
+  if ($( "#invert" ).attr("aria-pressed") === "false") {
+    invert = [[0,1], [1,0]];
+  }
+  else {
+    invert = [[0,0], [1,1]];
+  }
+  updateToggle(saturation, invert);
+  updateTexture(updatedImage);
+};
+
+function updateToggle(saturation, invert) {
+  textureEdited = canvas.texture(edited);
+  updatedImage = canvas.draw(textureEdited).hueSaturation(0,saturation).update();
+  updateTexture(updatedImage);
+  updatedImage = canvas.draw(textureEdited).curves(invert).update();
+  updateTexture(updatedImage);
+  updatedImage = canvas.draw(textureEdited).brightnessContrast(brightness,contrast).update();
+};
+
+function brightnessAndContrast() {
   $( "#slider-brightness" ).slider({
     value: 50,
     animate:"fast",
@@ -120,7 +143,7 @@ function filter() {
     slide: function( event, ui ) {
       brightness = 1.75 * (( $( "#slider-brightness" ).slider( "value" ) / 100) - 0.5);
       canvas.draw(textureEdited).brightnessContrast(brightness,contrast).update();
-      image.src = canvas.toDataURL();
+      imgdiv.src = canvas.toDataURL();
     }
   });
 
@@ -131,67 +154,50 @@ function filter() {
      slide: function( event, ui ) {
        contrast = 1. * (( $( "#slider-contrast" ).slider( "value" ) / 100) - 0.5);
        canvas.draw(textureEdited).brightnessContrast(brightness,contrast).update();
-       image.src = canvas.toDataURL();
+       imgdiv.src = canvas.toDataURL();
     }
   });
 };
 
 function updateTexture(updatedImage) {
   textureEdited.loadContentsOf(updatedImage);
-  image.src = canvas.toDataURL();
+  imgdiv.src = canvas.toDataURL();
 }
 
 function downloadImage(link) {
-  link.href = image.src;
+  link.href = imgdiv.src;
 }
 
 window.onload = function() {
   init();
   uploadFile();
-  filter();
+  brightnessAndContrast();
 }
 
 // ----------------- SVG functions -----------------
-
-var svgCanvas;
-var formData;
-var test;
+var svgdiv;
+var scaleFactor;
+var width = 360;
 
 function initSVG() {
-  svgCanvas = document.getElementById('sourceCanvas');
-  // svgCanvas = Canvas2Image.convertToJPEG(document.getElementById('sourceCanvas'), edited.width, edited.height);
-  // var svg = svgCanvas.getSvg();
-	// image.src = svgCanvas.toDataURL("image/png");
-  // var canvasImage = new Image;
-  // console.log(textureEdited);
-  // canvasImage.src = svgCanvas.toDataURL();
-  // document.body.appendChild(canvasImage);
-  // test = document.getElementById('edited');
-  // test.src = svgCanvas.toDataURL();
-  // document.body.appendChild(test);
-  // svgCanvas.parentNode.insertBefore(image, edited);
-  // svgCanvas.parentNode.removeChild(edited);
-  // handleFile(svgCanvas);
-  document.body.appendChild(image);
+  document.getElementById("svgTab").click();
+  svgdiv = document.getElementById('svgdiv');
+  handleFiles(imgdiv.src);
 }
 
-function handleFile(file) {
-  Potrace.loadImageFromUrl(file);
+function handleFiles(files) {
+  Potrace.loadImageFromUrl(files);
   Potrace.process(function(){
-    displayImg();
+    scaleFactor = width / sourceWidth;
     displaySVG(1);
   });
 }
 
-function displayImg(){
-  var imgdiv = document.getElementById('imgdiv');
-  imgdiv.style.display = 'inline-block';
-  imgdiv.innerHTML = "<p>Input image:</p>";
-  imgdiv.appendChild(Potrace.img);
+function displaySVG(size, type){
+  svgdiv.innerHTML = Potrace.getSVG(scaleFactor, type);
 }
 
-function displaySVG(size, type){
-  var svgdiv = document.getElementById('svgdiv');
-  svgdiv.style.display = 'inline-block';
-  svgdiv.innerHTML = "<p>Result:</p>" + Potrace.getSVG(size, type);
+function downloadSVG(e){
+	 e.target.download = "potrace" + (new Date()).toLocaleTimeString() + ".svg";
+	 e.target.href = "data:image/svg+xml;," + Potrace.getSVG(scaleFactor);
 }

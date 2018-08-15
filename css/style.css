@@ -122,27 +122,31 @@ a1:hover{
 
 .imageToggle{
   display: block;
-  width: 200;
 }
 
 /* ---------------------- Canvas Images ---------------------- */
 
-.input-image{
-  float: center;
-  width: 600px;
-}
-
-.displayedImage img{
+#sourceCanvas {
   width: 360px;
-  height auto;
-}
-
-.displayedImage canvas{
-  width: 360px;
-  height auto;
 }
 
 /* ---------------------- Image Button Modifiers ---------------------- */
 .btn-toolbar{
   padding-top: 25px;
+}
+
+/* ---------------------- svg images ---------------------- */
+#svgdiv{
+  float: right;
+  width: 360px;
+  height: auto;
+}
+
+.svgOutput path{
+  width: 360px;
+}
+
+.svgOutput img {
+  width: 360px;
+  height: auto;
 }
