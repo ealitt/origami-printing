@@ -1,0 +1,152 @@
+.container{
+  width: 800px;
+  height: 680px;
+  position: relative;
+  margin: 40px auto;
+  background: #E4EBED;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+
+#viewer{
+  background: #E4EBED;
+  float: right;
+  width: 800px;
+  height: 680px;
+  border-width: 2px;
+  border-style: none none none solid;
+  -webkit-border-top-right-radius: 10px;
+  -webkit-border-bottom-right-radius: 10px;
+  -moz-border-radius-topright: 10px;
+  -moz-border-radius-bottomright: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.sidenav{
+    float:left;
+    display: block;
+    padding: 8px 8px;
+    width: 300px;
+    margin-top: 2px;
+    margin-left: 2px;
+}
+
+a1{
+  color: black;
+}
+
+a1:hover{
+  color: #6A8B94;
+  text-decoration: underline;
+}
+
+/* ---------------------- Top tab bar ---------------------- */
+
+.tab{
+  overflow: hidden;
+  background-color: #E4EBED;
+  border-bottom: 1px solid #CCCCCC;
+}
+
+.tab button{
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 10px 18px;
+  transition: 0.1s;
+  font-size: 16px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+
+.tab button:hover{
+  background-color: #AEBBBF;
+}
+
+.tab button.active{
+  background-color: #AEBBBF;
+}
+
+.tabcontent{
+  display: none;
+  padding: 6px 12px;
+}
+
+/* ---------------------- Accordion sidebar ---------------------- */
+
+.accordion-group{
+  padding-bottom: 2px;
+}
+
+.accordion-heading{
+  display: block;
+  background-color: inherit;
+  border: 2px solid #CCCCCC;
+  outline: none;
+  cursor: pointer;
+  padding: 8px 8px;
+  transition: 0.1s;
+  font-size: 15px;
+  color: black;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+
+#accordion-inner{
+  padding: 18px 10px;
+  border-bottom: 2px solid #CCCCCC;
+  border-left: 2px solid #CCCCCC;
+  border-right: 2px solid #CCCCCC;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+
+
+/* ---------------------- Adjustment Sliders ---------------------- */
+
+.imageSlider{
+  width: 380px;
+  float: left;
+}
+
+#slider-brightness, #slider-contrast{
+  width: 360px;
+}
+
+.imageToggle{
+  display: block;
+}
+
+/* ---------------------- Canvas Images ---------------------- */
+
+#sourceCanvas {
+  width: 360px;
+}
+
+/* ---------------------- Image Button Modifiers ---------------------- */
+.btn-toolbar{
+  padding-top: 25px;
+}
+
+/* ---------------------- svg images ---------------------- */
+#svgdiv{
+  float: right;
+  width: 360px;
+  height: auto;
+}
+
+.svgOutput path{
+  width: 360px;
+}
+
+.svgOutput img {
+  width: 360px;
+  height: auto;
+}
