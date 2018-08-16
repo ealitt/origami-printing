@@ -12,6 +12,8 @@
 #viewer{
   background: #E4EBED;
   float: right;
+  position: absolute;
+  right: 0px;
   width: 800px;
   height: 680px;
   border-width: 2px;
@@ -122,6 +124,12 @@ a1:hover{
 
 .imageToggle{
   display: block;
+  padding-top: 5px;
+  padding-bottom: 10px;
+}
+
+.btn-group.imgDownload{
+  float: right;
 }
 
 /* ---------------------- Canvas Images ---------------------- */
@@ -142,6 +150,18 @@ a1:hover{
   height: auto;
 }
 
+#svg {
+  background: white;
+}
+
+.btn-group.svgDownload{
+  padding-top: 10px;
+  padding-right: 20px;
+  position: absolute;
+  right: 0px;
+  float: right;
+}
+
 .svgOutput path{
   width: 360px;
 }
@@ -149,4 +169,16 @@ a1:hover{
 .svgOutput img {
   width: 360px;
   height: auto;
+}
+
+/* ---------------------- 3D Model Viewer ---------------------- */
+
+#viewer3D {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#download3D {
+  float: right;
 }

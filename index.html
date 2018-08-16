@@ -17,6 +17,12 @@
     <script src="js/glfx.js"></script>
     <script src="js/potrace.js"></script>
     <script src="js/ui.js"></script>
+
+    <script type="text/javascript" src="js/3d/pathseg.js"></script>
+  	<script type="text/javascript" src="js/3d/three.min.js"></script>
+  	<script type="text/javascript" src="js/3d/jsmodeler.js"></script>
+  	<script type="text/javascript" src="js/3d/jsmodeler.ext.three.js"></script>
+    <script type="text/javascript" src="js/3d/jsmodeler.ext.svgtomodel.js"></script>
 </head>
 
 <body>
@@ -44,30 +50,28 @@
       <div class="tab">
           <button class="tabOption" onclick="openTab(event, 'Image')" id="imageTab">Image</button>
           <button class="tabOption" onclick="openTab(event, 'SVG')" id="svgTab">SVG</button>
-          <button class="tabOption" onclick="openTab(event, '3D')" id="3dTab">3D</button>
+          <button class="tabOption" onclick="openTab(event, '3D')" id="3DTab">3D</button>
           <button class="tabOption" onclick="openTab(event, 'About')">About</button>
       </div>
       <div id="Image" class="tabcontent">
         <div id="input-image" class="displayedImage">
-          <img id="edited" src="images/test.png">
+          <img id="edited" src="images/test.jpg">
         </div>
         <div>
+          <div class="imageToggle">
+              <button id="blackAndWhite" type="button" class="btn btn-outline-secondary btn-sm" data-toggle="button" aria-pressed="false" autocomplete="off" onclick="blackAndWhite()">Black and White</button>
+              <button id="invert" type="button" class="btn btn-outline-secondary btn-sm" data-toggle="button" aria-pressed="false" autocomplete="off" onclick="invertImage()">Invert</button>
+              <button id="revert" type="button" class="btn btn-outline-primary btn-sm" onclick="revertImage()">Revert</button>
+              <div class="btn-group imgDownload" role="group">
+                <a class="btn btn-outline-success btn-sm" href="#" onclick="downloadImage(this)" download>Download Image</a>
+                <button id="svgButton" type="button" class="btn btn-outline-success btn-sm" onclick="initSVG()">To svg</button>
+              </div>
+          </div>
           <div class="imageSlider">
               <label>Brightness</label>
               <div id="slider-brightness" style="background: #AEBBBF;"></div>
               <label>Contrast</label>
               <div id="slider-contrast" style="background: #AEBBBF;"></div>
-          </div>
-          <div class="imageToggle">
-              <button id="blackAndWhite" type="button" class="btn btn-outline-secondary btn-sm" data-toggle="button" aria-pressed="false" autocomplete="off" onclick="blackAndWhite()">Black and White</button>
-              <button id="invert" type="button" class="btn btn-outline-secondary btn-sm" data-toggle="button" aria-pressed="false" autocomplete="off" onclick="invertImage()">Invert</button>
-              <button id="revert" type="button" class="btn btn-outline-primary btn-sm" onclick="revertImage()">Revert</button>
-          </div>
-        </div>
-        <div class="btn-toolbar" role="toolbar">
-          <div class="btn-group" role="group">
-            <a class="btn btn-outline-success btn-sm" href="#" onclick="downloadImage(this)" download>Download</a>
-            <button id="svgButton" type="button" class="btn btn-outline-success btn-sm" onclick="initSVG()">To svg</button>
           </div>
         </div>
       </div>
@@ -77,17 +81,20 @@
           <img id="imgdiv">
           <img id="svgdiv">
         </div>
-        <div class="btn-group" role="group">
-          <a class="btn btn-outline-success btn-sm" href="#" onclick="downloadSVG(event)" download>Download</a>
-          <button id="3dButton" type="button" class="btn btn-outline-success btn-sm" onclick="init3D()">To 3D</button>
+        <div id="downloadsvgButtons">
+          <div class="btn-group svgDownload" role="group">
+            <a class="btn btn-outline-success btn-sm" href="#" onclick="downloadSVG(event)" download>Download SVG</a>
+            <button id="3dButton" type="button" class="btn btn-outline-success btn-sm" onclick="init3D()">To 3D</button>
+          </div>
         </div>
       </div>
 
       <div id="3D" class="tabcontent">
-        <h3>3D</h3>
-        <p>3D rendering?</p>
+        <canvas id="viewer3D" width="400" height="400"></canvas>
+        <div>
+          <a id="download3D" class="btn btn-outline-success btn-sm" href="#" onclick="download3D(event)" download>Download as STL</a>
+        </div>
       </div>
-
       <div id="About" class="tabcontent">
         <h3>About</h3>
         <p>Info about project</p>

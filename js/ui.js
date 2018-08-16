@@ -76,6 +76,8 @@ function uploadFile() {
     updatedImage = canvas.draw(textureEdited).update();
     imgdiv.src = canvas.toDataURL();
     sourceWidth = canvas.width;
+    document.getElementById("imageTab").click();
+    resetValues();
   };
 }
 
@@ -193,11 +195,43 @@ function handleFiles(files) {
   });
 }
 
-function displaySVG(size, type){
+function displaySVG(size, type) {
   svgdiv.innerHTML = Potrace.getSVG(scaleFactor, type);
 }
 
-function downloadSVG(e){
+function downloadSVG(e) {
 	 e.target.download = "potrace" + (new Date()).toLocaleTimeString() + ".svg";
 	 e.target.href = "data:image/svg+xml;," + Potrace.getSVG(scaleFactor);
+}
+
+// ------------------ 3D Model Functions ------------------
+var meshes;
+var model;
+
+function init3D() {
+  document.getElementById("3DTab").click();
+	var viewerSettings = {
+		cameraEyePosition : [0, 0, 1.5],
+		cameraCenterPosition : [0.0, 0.0, 0.0],
+		cameraUpVector : [0.0, 1.0, 0.0]
+	};
+
+	var viewer = new JSM.ThreeViewer ();
+	viewer.Start (document.getElementById ('viewer3D'), viewerSettings);
+
+	var svgObject = document.getElementById ('svgdiv');
+	model = JSM.SvgToModel (svgObject, 1, 5, null);
+	meshes = JSM.ConvertModelToThreeMeshes (model);
+	viewer.AddMeshes(meshes);
+
+	viewer.FitInWindow ();
+	viewer.Draw ();
+}
+
+function download3D(e) {
+  var stl = JSM.ExportModelToStl (model, 'JSModelerBody', false);
+
+  var fileBlob = new Blob([stl], {type: "application/octet-binary"});
+  e.target.download = (new Date()).toLocaleTimeString() + ".stl";
+  e.target.href = URL.createObjectURL(fileBlob);
 }
