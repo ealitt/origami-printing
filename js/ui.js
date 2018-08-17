@@ -219,7 +219,8 @@ function init3D() {
 	var viewer = new JSM.ThreeViewer ();
 	viewer.Start (document.getElementById ('viewer3D'), viewerSettings);
 
-	var svgObject = document.getElementById ('svgdiv');
+	var svgObject = document.getElementById("svg");
+  console.log(svgObject);
 	model = JSM.SvgToModel (svgObject, 1, 5, null);
 	meshes = JSM.ConvertModelToThreeMeshes (model);
 	viewer.AddMeshes(meshes);
