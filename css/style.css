@@ -138,13 +138,18 @@ a1:hover{
   width: 360px;
 }
 
-/* ---------------------- Image Button Modifiers ---------------------- */
-.btn-toolbar{
-  padding-top: 25px;
+/* ---------------------- svg images ---------------------- */
+
+.svgOutput path{
+  width: 360px;
 }
 
-/* ---------------------- svg images ---------------------- */
-#svgdiv{
+.svgOutput img {
+  width: 360px;
+  height: auto;
+}
+
+#svgdiv {
   float: right;
   width: 360px;
   height: auto;
@@ -154,21 +159,18 @@ a1:hover{
   background: white;
 }
 
-.btn-group.svgDownload{
+.svgToggle {
+  display: block;
   padding-top: 10px;
-  padding-right: 20px;
-  position: absolute;
-  right: 0px;
+  padding-bottom: 10px;
+}
+
+.btn-group.svgDownload {
   float: right;
 }
 
-.svgOutput path{
+#slider-stroke {
   width: 360px;
-}
-
-.svgOutput img {
-  width: 360px;
-  height: auto;
 }
 
 /* ---------------------- 3D Model Viewer ---------------------- */

@@ -14,6 +14,8 @@
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
+    <script src=https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.5/svg.js></script>
+    <script src=js/saveSvgAsPng.js></script>
     <script src="js/glfx.js"></script>
     <script src="js/potrace.js"></script>
     <script src="js/ui.js"></script>
@@ -64,7 +66,7 @@
               <button id="revert" type="button" class="btn btn-outline-primary btn-sm" onclick="revertImage()">Revert</button>
               <div class="btn-group imgDownload" role="group">
                 <a class="btn btn-outline-success btn-sm" href="#" onclick="downloadImage(this)" download>Download Image</a>
-                <button id="svgButton" type="button" class="btn btn-outline-success btn-sm" onclick="initSVG()">To svg</button>
+                <button id="svgButton" type="button" class="btn btn-outline-success btn-sm" onclick="initSVG(event)">To svg</button>
               </div>
           </div>
           <div class="imageSlider">
@@ -81,12 +83,26 @@
           <img id="imgdiv">
           <div id="svgdiv">
           </div>
-        </div>
-        <div id="downloadsvgButtons">
-          <div class="btn-group svgDownload" role="group">
-            <a class="btn btn-outline-success btn-sm" href="#" onclick="downloadSVG(event)" download>Download SVG</a>
-            <button id="3dButton" type="button" class="btn btn-outline-success btn-sm" onclick="init3D()">To 3D</button>
+          <div id="tempSVG" style="display: none;">
           </div>
+        </div>
+        <div class="svgToggle">
+          <div class="btn-group btn-group-toggle stroke" data-toggle="buttons">
+            <label class="btn btn-outline-secondary btn-sm active" onclick=checkStroke()>
+              <input type="radio" name="options" id="whiteStroke" autocomplete="off" checked> White Stroke
+            </label>
+            <label class="btn btn-outline-secondary btn-sm" onclick="checkStroke()">
+              <input type="radio" name="options" id="blackStroke" autocomplete="off"> Black Stroke
+            </label>
+          </div>
+          <div class="btn-group svgDownload" role="group">
+            <a class="btn btn-outline-success btn-sm" href="#" onclick="generateTempSVG(true, event)" download>Download SVG</a>
+            <button id="3dButton" type="button" class="btn btn-outline-success btn-sm" onclick="generateTempSVG(false, event)">To 3D</button>
+          </div>
+        </div>
+        <div>
+          <label>Stroke Thickness</label>
+          <div id="slider-stroke" style="background: #AEBBBF;"></div>
         </div>
       </div>
 

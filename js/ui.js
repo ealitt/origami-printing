@@ -90,6 +90,10 @@ function resetValues() {
     $(this).slider( 'value', 50 );
     contrast = 0;
   });
+  $( "#slider-stroke" ).each(function(){
+    $(this).slider( 'value', 0 );
+    strokeThickness = 0;
+  });
   $( "#blackAndWhite" ).removeClass('active');
   $( "#blackAndWhite" ).attr("aria-pressed", "false");
   $( "#invert" ).removeClass('active');
@@ -170,38 +174,86 @@ function downloadImage(link) {
   link.href = imgdiv.src;
 }
 
-window.onload = function() {
-  init();
-  uploadFile();
-  brightnessAndContrast();
-}
-
 // ----------------- SVG functions -----------------
-var svgdiv;
 var scaleFactor;
 var width = 360;
+var strokeThickness;
+var path = null;
 
-function initSVG() {
+var svgdiv;
+var svgObject;
+var trace = new Potrace();;
+
+function initSVG(e) {
   document.getElementById("svgTab").click();
-  svgdiv = document.getElementById('svgdiv');
+  svgObject = document.getElementById("svg");
   handleFiles(imgdiv.src);
+  svgdiv = document.getElementById('svgdiv');
+}
+
+function stroke(){
+  $( "#slider-stroke" ).slider({
+    value: 0,
+    animate:"fast",
+    orientation: "horizontal",
+    slide: function( event, ui ) {
+      strokeThickness = $( "#slider-stroke" ).slider( "value" ) * 0.1;
+      if(path != null){
+        path.stroke({ width: strokeThickness });
+      }
+    }
+  });
+}
+
+function checkStroke(){
+  if(document.getElementById("blackStroke").checked){
+    path.stroke("white");
+  }
+  else{
+    path.stroke("black");
+  }
 }
 
 function handleFiles(files) {
-  Potrace.loadImageFromUrl(files);
-  Potrace.process(function(){
+  trace.loadImageFromUrl(files);
+  trace.process(function(){
     scaleFactor = width / sourceWidth;
     displaySVG(1);
   });
 }
 
 function displaySVG(size, type) {
-  svgdiv.innerHTML = Potrace.getSVG(scaleFactor, type);
+  svgdiv.innerHTML = trace.getSVG(scaleFactor);
+  svgObject = document.getElementById("svg");
+  svgObject.children[0].id = "pathSVG";
+  path = SVG.adopt(document.getElementById("pathSVG"));
+  path.stroke("white");
 }
 
-function downloadSVG(e) {
-	 e.target.download = "potrace" + (new Date()).toLocaleTimeString() + ".svg";
-	 e.target.href = "data:image/svg+xml;," + Potrace.getSVG(scaleFactor);
+var tempSVG;
+var tempPath;
+function generateTempSVG(download, e) {
+  tempSVG = document.getElementById("tempSVG");
+  let tempPotrace = new Potrace();
+  svgAsPngUri(svgObject, {backgroundColor: "white"}, function(uri) {
+    tempPotrace.loadImageFromUrl(uri);
+    tempPotrace.process(function(){
+      tempPath = tempPotrace.getSVG(scaleFactor);
+      tempSVG.innerHTML = tempPath;
+      if(download){
+        downloadSVG(e);
+      }
+      else {
+        init3D();
+      }
+    });
+  });
+}
+
+function downloadSVG(e){
+  var fileBlobSVG = new Blob([tempPath], {type: "application/octet-binary"});
+  e.target.download = (new Date()).toLocaleTimeString() + ".svg";
+  e.target.href = URL.createObjectURL(fileBlobSVG);
 }
 
 // ------------------ 3D Model Functions ------------------
@@ -219,9 +271,7 @@ function init3D() {
 	var viewer = new JSM.ThreeViewer ();
 	viewer.Start (document.getElementById ('viewer3D'), viewerSettings);
 
-	var svgObject = document.getElementById("svg");
-  console.log(svgObject);
-	model = JSM.SvgToModel (svgObject, 1, 5, null);
+	model = JSM.SvgToModel (tempSVG, 1, 5, null);
 	meshes = JSM.ConvertModelToThreeMeshes (model);
 	viewer.AddMeshes(meshes);
 
@@ -230,9 +280,17 @@ function init3D() {
 }
 
 function download3D(e) {
-  var stl = JSM.ExportModelToStl (model, 'JSModelerBody', false);
-
-  var fileBlob = new Blob([stl], {type: "application/octet-binary"});
+  let stl = JSM.ExportModelToStl (model, 'JSModelerBody', false);
+  let fileBlobSTL = new Blob([stl], {type: "application/octet-binary"});
   e.target.download = (new Date()).toLocaleTimeString() + ".stl";
-  e.target.href = URL.createObjectURL(fileBlob);
+  e.target.href = URL.createObjectURL(fileBlobSTL);
+}
+
+// ------------------ On Load ------------------
+
+window.onload = function() {
+  init();
+  uploadFile();
+  brightnessAndContrast();
+  stroke();
 }
