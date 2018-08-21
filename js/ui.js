@@ -231,27 +231,23 @@ function displaySVG(size, type) {
 }
 
 var tempSVG;
-var tempPath;
 function generateTempSVG(download, e) {
   tempSVG = document.getElementById("tempSVG");
   let tempPotrace = new Potrace();
   svgAsPngUri(svgObject, {backgroundColor: "white"}, function(uri) {
     tempPotrace.loadImageFromUrl(uri);
     tempPotrace.process(function(){
-      tempPath = tempPotrace.getSVG(scaleFactor);
-      tempSVG.innerHTML = tempPath;
-      if(download){
-        downloadSVG(e);
-      }
-      else {
-        init3D();
-      }
+      tempSVG.innerHTML = tempPotrace.getSVG(scaleFactor);
+      init3D();
     });
   });
 }
 
 function downloadSVG(e){
-  var fileBlobSVG = new Blob([tempPath], {type: "application/octet-binary"});
+  let svg = document.getElementById("svg");
+  let serializer = new XMLSerializer();
+  let fileBlobSVG = new Blob([serializer.serializeToString(svg)],
+                            {'type': "image/svg+xml"});
   e.target.download = (new Date()).toLocaleTimeString() + ".svg";
   e.target.href = URL.createObjectURL(fileBlobSVG);
 }
