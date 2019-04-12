@@ -25,6 +25,7 @@
   	<script type="text/javascript" src="js/3d/jsmodeler.js"></script>
   	<script type="text/javascript" src="js/3d/jsmodeler.ext.three.js"></script>
     <script type="text/javascript" src="js/3d/jsmodeler.ext.svgtomodel.js"></script>
+
 </head>
 
 <body>
@@ -61,12 +62,12 @@
         </div>
         <div>
           <div class="imageToggle">
-              <button id="blackAndWhite" type="button" class="btn btn-outline-secondary btn-sm" data-toggle="button" aria-pressed="false" autocomplete="off" onclick="blackAndWhite()">Black and White</button>
+              <button id="blackAndWhite" type="button" class="btn btn-outline-secondary btn-sm" data-toggle="button" aria-pressed="false" autocomplete="off" onclick="blackAndWhite()">Greyscale</button>
               <button id="invert" type="button" class="btn btn-outline-secondary btn-sm" data-toggle="button" aria-pressed="false" autocomplete="off" onclick="invertImage()">Invert</button>
               <button id="revert" type="button" class="btn btn-outline-primary btn-sm" onclick="revertImage()">Revert</button>
               <div class="btn-group imgDownload" role="group">
                 <a class="btn btn-outline-success btn-sm" href="#" onclick="downloadImage(this)" download>Download Image</a>
-                <button id="svgButton" type="button" class="btn btn-outline-success btn-sm" onclick="initSVG(event)">To svg</button>
+                <button id="svgButton" type="button" class="btn btn-outline-success btn-sm" onclick="initSVG(event)">To SVG</button>
               </div>
           </div>
           <div class="imageSlider">
@@ -114,7 +115,32 @@
       </div>
       <div id="About" class="tabcontent">
         <h3>About</h3>
-        <p>Info about project</p>
+        <p>This is the origami printing web tool used to create 3D models from origami pattern images.<br />
+            Follow these steps to make a 3D file.<br />
+            <ol>
+              <li>Image Tab</li>
+                <ul>
+                  <li>Dark regions of image will be the final 3D model. White colors will be ignored. </li>
+                  <li>Given a fold pattern similar to the default image, try the following steps:</li>
+                  <li>"Greyscale" -> "Invert" -> Increase brightness to whiten colored fold lines -> Increase contrast to distinguish black and white regions
+                  <li>Click "To SVG" to generate tracing of image to prep for 3D model generation</li>
+                </ul>
+              <li>SVG Tab</li>
+                <ul>
+                  <li>Increasing the "White Stroke" will increase the space for folding</li>
+                  <li>Increasing the "Black Stroke" will cause the opposite of the above to happen</li>
+                  <li>Click "To 3D" to generate the 3D model</li>
+                </ul>
+              <li>3D Tab</li>
+                <ul>
+                  <li>A 3D viewer will appear to show the resulting 3D model. You can left-click and drag to rotate the model</li>
+                  <li>By default the 3D model will have a thickness of 1 mm. I recommend changing this to 0.15 mm for printing</li>
+                  <li>A thin 3D model isn't interesting to view, so download the model with "Download as STL" and start printing!</li>
+                </ul>
+            </ol>
+            The full story behind this project is on <a href="https://souzoumaker.com/blog-1/2019/1/16/printing-origami" target="_blank">my website</a>.<br />
+            If you are feeling generous, consider <a href="https://paypal.me/souzoumaker?locale.x=en_US" target="_blank">buying me a bag of coffee beans</a>. I enjoy making delicious coffee with my variety of methods (french press, pour over, slow drip, etc.). Being a college student, I would appreciate any help I can get to replenish my stock. Thank you!
+        </p>
       </div>
     </div>
   </div>
